@@ -7,10 +7,18 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import org.apache.log4j.Logger;
 
+import java.util.Properties;
+
 
 public class SynthetBot extends TelegramLongPollingBot {
 
-    final static Logger logger = Logger.getLogger(SynthetBot.class);
+    private final static Logger logger = Logger.getLogger(SynthetBot.class);
+    private final String token;
+
+    SynthetBot(Properties prop) {
+        super();
+        token = prop.getProperty("telegram.bot.token");
+    }
 
     /**
      * Метод для приема сообщений.
@@ -46,7 +54,7 @@ public class SynthetBot extends TelegramLongPollingBot {
      * @return имя бота
      */
     public String getBotUsername() {
-        return "BotName";
+        return "SynthetBot";
     }
 
 
@@ -57,6 +65,6 @@ public class SynthetBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return "BotToken";
+        return token;
     }
 }

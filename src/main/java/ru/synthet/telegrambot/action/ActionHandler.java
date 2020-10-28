@@ -1,10 +1,8 @@
 package ru.synthet.telegrambot.action;
 
-import org.telegram.telegrambots.api.objects.Update;
-
 public interface ActionHandler {
 
-    void setNext(ActionHandler actionHandler);
+    boolean accept(ActionContext actionContext);
 
-    boolean process(Update update);
+    void process(ActionContext actionContext);
 }

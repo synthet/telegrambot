@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.TelegramBotsApi;
-import ru.synthet.telegrambot.SynthetBot;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;

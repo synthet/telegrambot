@@ -22,15 +22,20 @@ public class ActionProcessor {
 
         handlers.stream()
                 .filter(handler -> handler.accept(actionContext))
-                .forEach(handler -> handler.process(actionContext));
+                .findFirst()
+                .ifPresent(handler -> handler.process(actionContext));
     }
 
     private ActionContext getActionContext(Update update) {
-        String message = update.getMessage().getText();
-        LOG.info(String.format("Message: %s", message));
         ActionContext actionContext = new ActionContext();
-        actionContext.setMessage(message);
-        actionContext.setChatId(update.getMessage().getChatId());
+        try {
+            String message = update.getMessage().getText();
+            LOG.info(String.format("Message: %s", message));
+            actionContext.setMessage(message);
+            actionContext.setChatId(update.getMessage().getChatId());
+        } catch (Exception ex) {
+            LOG.error(ex.getMessage());
+        }
         return actionContext;
     }
 

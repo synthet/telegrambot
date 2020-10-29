@@ -4,13 +4,13 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import ru.synthet.telegrambot.action.ActionContext;
 
+@Order(4)
 @Component
-@Order(1)
-public class PingActionHandler extends SendMessageActionHandler {
+public class DefaultActionHandler extends SendMessageActionHandler {
 
     @Override
     public boolean accept(ActionContext context) {
-        return context.getMessage().equals("/ping");
+        return false;
     }
 
     @Override
@@ -20,6 +20,6 @@ public class PingActionHandler extends SendMessageActionHandler {
 
     @Override
     protected String getMessage(ActionContext context) {
-        return "pong";
+        return context.getMessage();
     }
 }

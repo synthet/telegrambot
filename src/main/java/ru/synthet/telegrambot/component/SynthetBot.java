@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
@@ -42,11 +43,23 @@ public class SynthetBot extends TelegramLongPollingBot {
     public synchronized void sendMessage(String chatId, String message) {
         LOG.info(String.format("Send message: %s", message));
         SendMessage sendMessage = new SendMessage();
-        sendMessage.enableMarkdown(true);
+        sendMessage.enableMarkdown(false);
         sendMessage.setChatId(chatId);
         sendMessage.setText(message);
         try {
             sendApiMethod(sendMessage);
+        } catch (TelegramApiException e) {
+            LOG.error("Exception: ", e);
+        }
+    }
+
+    public synchronized void sendImage(String chatId, String url) {
+        LOG.info(String.format("Send image: %s", url));
+        SendPhoto sendPhoto = new SendPhoto();
+        sendPhoto.setPhoto(url);
+        sendPhoto.setChatId(chatId);
+        try {
+            sendPhoto(sendPhoto);
         } catch (TelegramApiException e) {
             LOG.error("Exception: ", e);
         }

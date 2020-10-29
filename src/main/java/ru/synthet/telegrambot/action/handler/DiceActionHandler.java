@@ -1,11 +1,13 @@
 package ru.synthet.telegrambot.action.handler;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import ru.synthet.telegrambot.action.ActionContext;
 
 import java.util.Random;
 
 @Component
+@Order(2)
 public class DiceActionHandler extends SendMessageActionHandler {
 
     @Override

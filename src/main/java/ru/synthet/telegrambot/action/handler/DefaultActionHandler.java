@@ -10,7 +10,7 @@ public class DefaultActionHandler extends SendMessageActionHandler {
 
     @Override
     public boolean accept(ActionContext context) {
-        return true;
+        return false;
     }
 
     @Override

@@ -24,7 +24,7 @@ public class TaskService {
     @Value("#{'${telegram.chat.ids}'.split(',')}")
     private List<String> chatIds;
 
-    @Scheduled(fixedRate = 60 * 1000)
+    @Scheduled(cron = "0 0/30 * * * ?")
     public void sendCats() {
         chatIds.forEach(this::sendCat);
     }

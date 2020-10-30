@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.MessageEntity;
 import org.telegram.telegrambots.api.objects.Update;
 
@@ -21,31 +22,42 @@ public class ActionProcessor {
 
     public void processUpdate(Update update) {
 
-        final ActionContext actionContext = getActionContext(update);
+        final ActionContext context = getActionContext(update);
+
+        if ((context.getMessage() == null) || (context.getChatId() == null)) {
+            return;
+        }
 
         handlers.stream()
-                .filter(handler -> handler.accept(actionContext))
+                .filter(handler -> handler.accept(context))
                 .findFirst()
-                .ifPresent(handler -> handler.process(actionContext));
+                .ifPresent(handler -> handler.process(context));
     }
 
     private ActionContext getActionContext(Update update) {
+        Message message = (update.getMessage() != null) ? update.getMessage() : update.getEditedMessage();
         ActionContext actionContext = new ActionContext();
-        try {
-            String command = getCommand(update);
-            LOG.info(String.format("Command: %s", command));
-            actionContext.setMessage(command);
-            actionContext.setChatId(update.getMessage().getChatId());
-        } catch (Exception ex) {
-            LOG.error(ex.getMessage());
+        if (message != null) {
+            try {
+                String command = getCommand(message);
+                LOG.info(String.format("Command: %s", command));
+                actionContext.setMessage(command);
+                actionContext.setChatId(getChatId(message));
+            } catch (Exception ex) {
+                LOG.error(ex.getMessage());
+            }
         }
         return actionContext;
     }
 
-    private String getCommand(Update update) {
-        String command = update.getMessage().getText();
-        if (!CollectionUtils.isEmpty(update.getMessage().getEntities())) {
-            Optional<MessageEntity> botCommandOptional = update.getMessage()
+    private Long getChatId(Message message) {
+        return message.getChatId();
+    }
+
+    private String getCommand(Message message) {
+        String command = message.getText();
+        if (!CollectionUtils.isEmpty(message.getEntities())) {
+            Optional<MessageEntity> botCommandOptional = message
                     .getEntities()
                     .stream()
                     .filter(e -> e.getType().equals("bot_command"))

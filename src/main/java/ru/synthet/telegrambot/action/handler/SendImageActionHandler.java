@@ -4,13 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.synthet.telegrambot.action.ActionContext;
 import ru.synthet.telegrambot.component.SynthetBot;
 
-public abstract class SendPhotoActionHandler extends SendMessageActionHandler {
+public abstract class SendImageActionHandler extends AbstractActionHandler {
 
     @Autowired
     private SynthetBot synthetBot;
 
-    @Override
-    void sendMessage(ActionContext context, String message) {
-        synthetBot.sendImage(String.valueOf(context.getChatId()), message);
+    void sendImage(ActionContext context, String caption, String url) {
+        synthetBot.sendImage(String.valueOf(context.getChatId()), caption, url);
     }
 }

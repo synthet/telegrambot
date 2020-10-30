@@ -1,18 +1,21 @@
 package ru.synthet.telegrambot.integration.cats;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import ru.synthet.telegrambot.integration.cats.datamodel.Cat;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,20 +31,21 @@ public class CatService {
     @Autowired
     private RestTemplate restTemplate;
 
-    public String getCat() {
+    public Optional<Cat> getCat() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("x-api-key", apiKey);
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(headers);
         try {
-            ResponseEntity<ArrayNode> response = restTemplate.exchange(URL, HttpMethod.GET, entity, ArrayNode.class);
-            ArrayNode arrayNode = response.getBody();
-            if (Optional.ofNullable(arrayNode).isPresent()) {
-                return arrayNode.get(0).get("url").textValue();
+            ResponseEntity<List<Cat>> response = restTemplate.exchange(URL, HttpMethod.GET, entity,
+                    new ParameterizedTypeReference<List<Cat>>() {
+                    });
+            List<Cat> cats = response.getBody();
+            if (!CollectionUtils.isEmpty(cats)) {
+                return cats.stream().findFirst();
             }
         } catch (Exception ex) {
             LOG.error(ex.getMessage());
-            return ex.getMessage();
         }
-        return "";
+        return Optional.empty();
     }
 }

@@ -53,11 +53,12 @@ public class SynthetBot extends TelegramLongPollingBot {
         }
     }
 
-    public synchronized void sendImage(String chatId, String url) {
+    public synchronized void sendImage(String chatId, String caption, String url) {
         LOG.info(String.format("Send image: %s", url));
         SendPhoto sendPhoto = new SendPhoto();
         sendPhoto.setPhoto(url);
         sendPhoto.setChatId(chatId);
+        sendPhoto.setCaption(caption);
         try {
             sendPhoto(sendPhoto);
         } catch (TelegramApiException e) {

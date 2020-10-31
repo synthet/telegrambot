@@ -10,7 +10,7 @@ import org.telegram.telegrambots.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
-import ru.synthet.telegrambot.action.ActionProcessor;
+import ru.synthet.telegrambot.component.action.ActionProcessor;
 
 @Component
 public class SynthetBot extends TelegramLongPollingBot {

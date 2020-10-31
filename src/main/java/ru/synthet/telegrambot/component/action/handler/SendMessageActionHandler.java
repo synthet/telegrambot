@@ -1,8 +1,8 @@
-package ru.synthet.telegrambot.action.handler;
+package ru.synthet.telegrambot.component.action.handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.synthet.telegrambot.action.ActionContext;
 import ru.synthet.telegrambot.component.SynthetBot;
+import ru.synthet.telegrambot.component.action.ActionContext;
 
 public abstract class SendMessageActionHandler extends AbstractActionHandler {
 

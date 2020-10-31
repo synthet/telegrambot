@@ -1,4 +1,4 @@
-package ru.synthet.telegrambot.action.handler;
+package ru.synthet.telegrambot.component.action.handler;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -6,14 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import ru.synthet.telegrambot.action.ActionContext;
+import ru.synthet.telegrambot.component.action.ActionContext;
 import ru.synthet.telegrambot.integration.cats.CatService;
 import ru.synthet.telegrambot.integration.cats.datamodel.Cat;
 
 import java.util.Optional;
 
-@Component
 @Order(3)
+@Component
 public class CatActionHandler extends SendImageActionHandler {
 
     private final Logger LOG = LogManager.getLogger(CatActionHandler.class);

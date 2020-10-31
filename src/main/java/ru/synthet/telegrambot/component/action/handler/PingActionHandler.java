@@ -1,11 +1,11 @@
-package ru.synthet.telegrambot.action.handler;
+package ru.synthet.telegrambot.component.action.handler;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import ru.synthet.telegrambot.action.ActionContext;
+import ru.synthet.telegrambot.component.action.ActionContext;
 
-@Component
 @Order(1)
+@Component
 public class PingActionHandler extends SendMessageActionHandler {
 
     @Override

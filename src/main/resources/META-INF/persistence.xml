@@ -1,0 +1,13 @@
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="http://java.sun.com/xml/ns/persistence"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+    <persistence-unit name="ru.synthet.telegrambot.data.jpa.hibernate">
+        <properties>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+            <property name="hibernate.connection.url"
+                      value="jdbc:h2:file:~/bot_db;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE"/>
+        </properties>
+    </persistence-unit>
+</persistence>

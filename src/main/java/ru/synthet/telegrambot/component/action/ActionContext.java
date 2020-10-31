@@ -1,4 +1,4 @@
-package ru.synthet.telegrambot.action;
+package ru.synthet.telegrambot.component.action;
 
 public class ActionContext {
 

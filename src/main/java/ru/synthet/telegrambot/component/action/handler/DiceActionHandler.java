@@ -1,15 +1,15 @@
-package ru.synthet.telegrambot.action.handler;
+package ru.synthet.telegrambot.component.action.handler;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import ru.synthet.telegrambot.action.ActionContext;
+import ru.synthet.telegrambot.component.action.ActionContext;
 
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Component
 @Order(2)
+@Component
 public class DiceActionHandler extends SendMessageActionHandler {
 
     private final static String REGEX = "/d(\\d)+";

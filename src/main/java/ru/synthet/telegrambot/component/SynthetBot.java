@@ -24,7 +24,7 @@ public class SynthetBot extends TelegramLongPollingBot {
     @Autowired
     private ActionProcessor actionProcessor;
 
-    SynthetBot(ActionProcessor actionProcessor) {
+    SynthetBot() {
         super();
     }
 

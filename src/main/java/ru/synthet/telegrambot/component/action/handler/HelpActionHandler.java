@@ -6,11 +6,11 @@ import ru.synthet.telegrambot.component.action.ActionContext;
 
 @Order(1)
 @Component
-public class PingActionHandler extends SendMessageActionHandler {
+public class HelpActionHandler extends SendMessageActionHandler {
 
     @Override
     public boolean accept(ActionContext context) {
-        return context.getMessage().equals("/ping");
+        return context.getMessage().equals("/help");
     }
 
     @Override
@@ -20,6 +20,6 @@ public class PingActionHandler extends SendMessageActionHandler {
 
     @Override
     protected String getMessage(ActionContext context) {
-        return "pong";
+        return "";
     }
 }

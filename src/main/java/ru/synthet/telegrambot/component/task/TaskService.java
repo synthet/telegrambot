@@ -29,7 +29,7 @@ public class TaskService {
         this.subscriptionService = subscriptionService;
     }
 
-    @Scheduled(cron = "0 0/30 * * * ?")
+    @Scheduled(cron = "0 0 * * * ?")
     public void sendCats() {
         getChatIds().forEach(this::sendCat);
     }

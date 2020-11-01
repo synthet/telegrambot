@@ -15,6 +15,7 @@ import ru.synthet.telegrambot.component.action.ActionProcessor;
 @Component
 public class SynthetBot extends TelegramLongPollingBot {
 
+    private static final String BOT_NAME = "SynthetBot";
     private final Logger LOG = LoggerFactory.getLogger(BotInitializer.class);
 
     @Value("${telegram.bot.token}")
@@ -23,7 +24,7 @@ public class SynthetBot extends TelegramLongPollingBot {
     @Autowired
     private ActionProcessor actionProcessor;
 
-    SynthetBot() {
+    SynthetBot(ActionProcessor actionProcessor) {
         super();
     }
 
@@ -32,7 +33,7 @@ public class SynthetBot extends TelegramLongPollingBot {
     }
 
     public String getBotUsername() {
-        return "SynthetBot";
+        return BOT_NAME;
     }
 
     @Override

@@ -49,13 +49,26 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     @Transactional
-    public void saveSubscriptions(Long chatId, SubscriptionType type) {
+    public boolean saveSubscriptions(Long chatId, SubscriptionType type) {
         Subscription subscription = getSubscription(chatId, type);
         if (subscription == null) {
             subscription = new Subscription();
             subscription.setChatId(chatId);
             subscription.setType(type);
             saveSubscriptions(subscription);
+            return true;
         }
+        return false;
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteSubscriptions(Long chatId, SubscriptionType type) {
+        Subscription subscription = getSubscription(chatId, type);
+        if (subscription != null) {
+            subscriptionRepository.delete(subscription);
+            return true;
+        }
+        return false;
     }
 }

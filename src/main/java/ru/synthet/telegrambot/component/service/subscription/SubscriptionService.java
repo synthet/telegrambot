@@ -15,5 +15,7 @@ public interface SubscriptionService {
 
     void saveSubscriptions(Subscription subscription);
 
-    void saveSubscriptions(Long chatId, SubscriptionType type);
+    boolean saveSubscriptions(Long chatId, SubscriptionType type);
+
+    boolean deleteSubscriptions(Long chatId, SubscriptionType type);
 }

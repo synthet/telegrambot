@@ -7,16 +7,16 @@ import ru.synthet.telegrambot.component.action.ActionContext;
 import ru.synthet.telegrambot.component.service.subscription.SubscriptionService;
 import ru.synthet.telegrambot.data.jpa.hibernate.SubscriptionType;
 
-@Order(4)
+@Order(5)
 @Component
-public class SubscribeActionHandler extends SendMessageActionHandler {
+public class UnSubscribeActionHandler extends SendMessageActionHandler {
 
     @Autowired
     private SubscriptionService subscriptionService;
 
     @Override
     public boolean accept(ActionContext context) {
-        return context.getMessage().equals("/subscribe");
+        return context.getMessage().equals("/unsubscribe");
     }
 
     @Override
@@ -26,6 +26,6 @@ public class SubscribeActionHandler extends SendMessageActionHandler {
 
     @Override
     protected String getMessage(ActionContext context) {
-        return subscriptionService.saveSubscriptions(context.getChatId(), SubscriptionType.CAT) ? "Subscribed" : "";
+        return subscriptionService.deleteSubscriptions(context.getChatId(), SubscriptionType.CAT) ? "Unsubscribed" : "";
     }
 }

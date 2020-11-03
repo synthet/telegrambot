@@ -16,6 +16,16 @@ public class DiceActionHandler extends SendMessageActionHandler {
     private final static Pattern pattern = Pattern.compile(REGEX);
 
     @Override
+    public String getCommand() {
+        return "/d20";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Roll the dice";
+    }
+
+    @Override
     public boolean accept(ActionContext context) {
         Matcher matcher = pattern.matcher(context.getMessage());
         return matcher.matches();

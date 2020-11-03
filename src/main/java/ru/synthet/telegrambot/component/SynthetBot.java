@@ -5,8 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.api.methods.GetFile;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.api.objects.File;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
@@ -65,5 +67,11 @@ public class SynthetBot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             LOG.error("Exception: ", e);
         }
+    }
+
+    public String getFileURL(String fileId) throws TelegramApiException {
+        GetFile getFile = new GetFile().setFileId(fileId);
+        String filePath = execute(getFile).getFilePath();
+        return File.getFileUrl(getBotToken(), filePath);
     }
 }

@@ -9,6 +9,16 @@ import ru.synthet.telegrambot.component.action.ActionContext;
 public class DefaultActionHandler extends SendMessageActionHandler {
 
     @Override
+    public String getCommand() {
+        return "";
+    }
+
+    @Override
+    public String getDescription() {
+        return "";
+    }
+
+    @Override
     public boolean accept(ActionContext context) {
         return false;
     }

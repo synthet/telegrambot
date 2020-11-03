@@ -5,10 +5,13 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.MessageEntity;
+import org.telegram.telegrambots.api.objects.PhotoSize;
 import org.telegram.telegrambots.api.objects.Update;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +27,7 @@ public class ActionProcessor {
 
         final ActionContext context = getActionContext(update);
 
-        if ((context.getMessage() == null) || (context.getChatId() == null)) {
+        if ((StringUtils.isEmpty(context.getMessage()) && !context.getHasPhoto()) || (context.getChatId() == null)) {
             return;
         }
 
@@ -36,18 +39,30 @@ public class ActionProcessor {
 
     private ActionContext getActionContext(Update update) {
         Message message = (update.getMessage() != null) ? update.getMessage() : update.getEditedMessage();
-        ActionContext actionContext = new ActionContext();
+        ActionContext context = new ActionContext();
         if (message != null) {
             try {
                 String command = getCommand(message);
                 LOG.info(String.format("Command: %s", command));
-                actionContext.setMessage(command);
-                actionContext.setChatId(getChatId(message));
+                context.setMessage(command);
+                context.setChatId(getChatId(message));
+                processPhoto(message, context);
             } catch (Exception ex) {
                 LOG.error(ex.getMessage());
             }
         }
-        return actionContext;
+        return context;
+    }
+
+    private void processPhoto(Message message, ActionContext context) {
+        List<PhotoSize> photoSizes = message.getPhoto();
+        if (!CollectionUtils.isEmpty(photoSizes)) {
+            Optional<String> optionalPhoto = photoSizes.stream()
+                    .max(Comparator.comparing(PhotoSize::getFileSize))
+                    .map(PhotoSize::getFileId);
+            optionalPhoto.ifPresent(context::setFileId);
+            context.setHasPhoto(true);
+        }
     }
 
     private Long getChatId(Message message) {

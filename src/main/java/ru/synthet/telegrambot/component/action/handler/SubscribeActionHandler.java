@@ -15,8 +15,18 @@ public class SubscribeActionHandler extends SendMessageActionHandler {
     private SubscriptionService subscriptionService;
 
     @Override
+    public String getCommand() {
+        return "/subscribe";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Subscribe me";
+    }
+
+    @Override
     public boolean accept(ActionContext context) {
-        return context.getMessage().equals("/subscribe");
+        return context.getMessage().equals(getCommand());
     }
 
     @Override

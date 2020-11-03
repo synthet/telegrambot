@@ -22,8 +22,18 @@ public class CatActionHandler extends SendImageActionHandler {
     private CatService catService;
 
     @Override
+    public String getCommand() {
+        return "/cat";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Send me a cat";
+    }
+
+    @Override
     public boolean accept(ActionContext context) {
-        return context.getMessage().equals("/cat");
+        return context.getMessage().equals(getCommand());
     }
 
     @Override
@@ -40,7 +50,7 @@ public class CatActionHandler extends SendImageActionHandler {
             return cat.getBreeds().get(0).getName();
         }
         if (!CollectionUtils.isEmpty(cat.getCategories())) {
-            return cat.getCategories().get(0).getName();
+            return "#" + cat.getCategories().get(0).getName();
         }
         return null;
     }

@@ -15,8 +15,18 @@ public class UnSubscribeActionHandler extends SendMessageActionHandler {
     private SubscriptionService subscriptionService;
 
     @Override
+    public String getCommand() {
+        return "/unsubscribe";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Unsubscribe me";
+    }
+
+    @Override
     public boolean accept(ActionContext context) {
-        return context.getMessage().equals("/unsubscribe");
+        return context.getMessage().equals(getCommand());
     }
 
     @Override

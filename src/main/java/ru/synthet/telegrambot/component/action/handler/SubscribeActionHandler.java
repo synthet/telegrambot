@@ -3,6 +3,7 @@ package ru.synthet.telegrambot.component.action.handler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import ru.synthet.telegrambot.component.EmojiConstants;
 import ru.synthet.telegrambot.component.action.ActionContext;
 import ru.synthet.telegrambot.component.service.subscription.SubscriptionService;
 import ru.synthet.telegrambot.data.jpa.hibernate.SubscriptionType;
@@ -36,6 +37,8 @@ public class SubscribeActionHandler extends SendMessageActionHandler {
 
     @Override
     protected String getMessage(ActionContext context) {
-        return subscriptionService.saveSubscriptions(context.getChatId(), SubscriptionType.CAT) ? "Subscribed" : "";
+        return subscriptionService.saveSubscriptions(context.getChatId(), SubscriptionType.CAT)
+                ? EmojiConstants.SMILEY_CAT
+                : "";
     }
 }

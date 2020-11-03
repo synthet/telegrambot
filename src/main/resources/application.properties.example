@@ -1,0 +1,23 @@
+# H2
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2
+
+# Data Source
+spring.datasource.url=jdbc:h2:file:./data/bot_db;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring.jpa.hibernate.ddl-auto=update
+
+# Logging
+logging.level.org.springframework.web=ERROR
+logging.level.ru.synthet=DEBUG
+logging.level.org.telegram=DEBUG
+
+# Settings
+telegram.bot.token=
+telegram.chat.ids=
+reddit.app.id=
+reddit.app.secret=
+cats.api.key=

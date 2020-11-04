@@ -10,6 +10,7 @@ import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.api.objects.File;
 import org.telegram.telegrambots.api.objects.Update;
+import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import ru.synthet.telegrambot.component.action.ActionProcessor;
@@ -56,12 +57,13 @@ public class SynthetBot extends TelegramLongPollingBot {
         }
     }
 
-    public synchronized void sendImage(String chatId, String caption, String url) {
+    public synchronized void sendImage(String chatId, String caption, String url, InlineKeyboardMarkup replyMarkup) {
         LOG.info(String.format("Send image: %s", url));
         SendPhoto sendPhoto = new SendPhoto();
         sendPhoto.setPhoto(url);
         sendPhoto.setChatId(chatId);
         sendPhoto.setCaption(caption);
+        sendPhoto.setReplyMarkup(replyMarkup);
         try {
             sendPhoto(sendPhoto);
         } catch (TelegramApiException e) {

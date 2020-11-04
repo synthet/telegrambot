@@ -1,15 +1,22 @@
 package ru.synthet.telegrambot.component.action.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import ru.synthet.telegrambot.component.EmojiConstants;
 import ru.synthet.telegrambot.component.action.ActionContext;
+import ru.synthet.telegrambot.data.bot.VoteCallbackData;
 import ru.synthet.telegrambot.integration.cats.CatService;
 import ru.synthet.telegrambot.integration.cats.datamodel.Cat;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Order(3)
@@ -20,6 +27,8 @@ public class CatActionHandler extends SendImageActionHandler {
 
     @Autowired
     private CatService catService;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Override
     public String getCommand() {
@@ -41,8 +50,12 @@ public class CatActionHandler extends SendImageActionHandler {
         Optional<Cat> optionalCat = catService.getCat();
         if (optionalCat.isPresent()) {
             Cat cat = optionalCat.get();
-            sendImage(context, getCaption(cat), cat.getUrl());
+            sendImage(context, getCaption(cat), getUrl(cat), getReplyMarkup(cat));
         }
+    }
+
+    private String getUrl(Cat cat) {
+        return cat.getUrl();
     }
 
     private String getCaption(Cat cat) {
@@ -55,4 +68,21 @@ public class CatActionHandler extends SendImageActionHandler {
         return null;
     }
 
+    private InlineKeyboardMarkup getReplyMarkup(Cat cat) {
+        String imageId = cat.getId();
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        InlineKeyboardButton buttonThumbsUp = new InlineKeyboardButton();
+        buttonThumbsUp.setText(EmojiConstants.THUMBS_UP);
+        buttonThumbsUp.setCallbackData(new VoteCallbackData(imageId, true).toString());
+        InlineKeyboardButton buttonThumbsDown = new InlineKeyboardButton();
+        buttonThumbsDown.setText(EmojiConstants.THUMBS_DOWN);
+        buttonThumbsDown.setCallbackData(new VoteCallbackData(imageId, false).toString());
+        List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
+        keyboardButtonsRow.add(buttonThumbsUp);
+        keyboardButtonsRow.add(buttonThumbsDown);
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(keyboardButtonsRow);
+        inlineKeyboardMarkup.setKeyboard(rowList);
+        return inlineKeyboardMarkup;
+    }
 }

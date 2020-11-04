@@ -6,10 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.telegram.telegrambots.api.objects.Message;
-import org.telegram.telegrambots.api.objects.MessageEntity;
-import org.telegram.telegrambots.api.objects.PhotoSize;
-import org.telegram.telegrambots.api.objects.Update;
+import org.telegram.telegrambots.api.objects.*;
+import ru.synthet.telegrambot.data.bot.CallbackData;
 
 import java.util.Comparator;
 import java.util.List;
@@ -27,34 +25,62 @@ public class ActionProcessor {
 
         final ActionContext context = getActionContext(update);
 
-        if ((StringUtils.isEmpty(context.getMessage()) && !context.getHasPhoto()) || (context.getChatId() == null)) {
-            return;
+        if (valid(context)) {
+            handlers.stream()
+                    .filter(handler -> handler.accept(context))
+                    .findFirst()
+                    .ifPresent(handler -> handler.process(context));
+        }
+    }
+
+    private boolean valid(ActionContext context) {
+
+        if (context.getChatId() == null) {
+            return false;
         }
 
-        handlers.stream()
-                .filter(handler -> handler.accept(context))
-                .findFirst()
-                .ifPresent(handler -> handler.process(context));
+        if (!StringUtils.isEmpty(context.getMessage())) {
+            return true;
+        }
+
+        if (context.getHasPhoto()) {
+            return true;
+        }
+
+        return context.getHasCallbackData();
     }
 
     private ActionContext getActionContext(Update update) {
-        Message message = (update.getMessage() != null) ? update.getMessage() : update.getEditedMessage();
         ActionContext context = new ActionContext();
-        if (message != null) {
-            try {
-                String command = getCommand(message);
-                LOG.info(String.format("Command: %s", command));
-                context.setMessage(command);
-                context.setChatId(getChatId(message));
-                processPhoto(message, context);
-            } catch (Exception ex) {
-                LOG.error(ex.getMessage());
-            }
+        CallbackQuery callbackQuery = update.getCallbackQuery();
+        Message message = null;
+        if (update.getMessage() != null) {
+            message = update.getMessage();
+        } else if (update.getEditedMessage() != null) {
+            message = update.getEditedMessage();
+        } else if (callbackQuery != null && callbackQuery.getMessage() != null) {
+            message = callbackQuery.getMessage();
         }
+        if (message != null) {
+            context.setChatId(getChatId(message));
+        }
+        if (callbackQuery != null) {
+            String data = callbackQuery.getData();
+            CallbackData callbackData = CallbackData.getInstance(data);
+            context.setCallbackData(callbackData);
+            if (callbackData != null) {
+                context.setHasCallbackData(true);
+            }
+        } else if (message != null) {
+            String command = getCommand(message);
+            context.setMessage(command);
+            processPhoto(context, message);
+        }
+        LOG.info(String.format("Command: %s", context.getMessage()));
         return context;
     }
 
-    private void processPhoto(Message message, ActionContext context) {
+    private void processPhoto(ActionContext context, Message message) {
         List<PhotoSize> photoSizes = message.getPhoto();
         if (!CollectionUtils.isEmpty(photoSizes)) {
             Optional<String> optionalPhoto = photoSizes.stream()
@@ -86,5 +112,4 @@ public class ActionProcessor {
         }
         return command;
     }
-
 }

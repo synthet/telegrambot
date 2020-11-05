@@ -1,6 +1,5 @@
 package ru.synthet.telegrambot.component.action.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +26,6 @@ public class CatActionHandler extends SendImageActionHandler {
 
     @Autowired
     private CatService catService;
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Override
     public String getCommand() {

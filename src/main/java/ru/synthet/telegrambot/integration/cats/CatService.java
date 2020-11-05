@@ -16,9 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import ru.synthet.telegrambot.component.EmojiConstants;
 import ru.synthet.telegrambot.component.service.download.DownloadService;
 import ru.synthet.telegrambot.component.service.download.MultipartInputStreamFileResource;
-import ru.synthet.telegrambot.integration.cats.datamodel.Cat;
-import ru.synthet.telegrambot.integration.cats.datamodel.ErrorResponse;
-import ru.synthet.telegrambot.integration.cats.datamodel.UploadResponse;
+import ru.synthet.telegrambot.integration.cats.datamodel.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +27,7 @@ public class CatService {
     private final Logger LOG = LogManager.getLogger(CatService.class);
 
     private static final String X_API_KEY = "x-api-key";
-    private static final String BASE_URL = "https://api.thecatapi.com/v1/images";
+    private static final String BASE_URL = "https://api.thecatapi.com/v1";
 
     @Value("${cats.api.key}")
     private String apiKey;
@@ -46,13 +44,29 @@ public class CatService {
         headers.set(X_API_KEY, apiKey);
         HttpEntity entity = new HttpEntity<>(headers);
         try {
-            ResponseEntity<List<Cat>> response = restTemplate.exchange(BASE_URL + "/search", HttpMethod.GET, entity,
+            ResponseEntity<List<Cat>> response = restTemplate.exchange(BASE_URL + "/images/search", HttpMethod.GET,
+                    entity,
                     new ParameterizedTypeReference<List<Cat>>() {
                     });
             List<Cat> cats = response.getBody();
             if (!CollectionUtils.isEmpty(cats)) {
                 return cats.stream().findFirst();
             }
+        } catch (Exception ex) {
+            LOG.error(ex.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    public Optional<VoteResponse> createVote(VoteRequest request) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(X_API_KEY, apiKey);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity entity = new HttpEntity<>(request, headers);
+        try {
+            ResponseEntity<VoteResponse> response = restTemplate.exchange(BASE_URL + "/votes", HttpMethod.POST,
+                    entity, VoteResponse.class);
+            return Optional.ofNullable(response.getBody());
         } catch (Exception ex) {
             LOG.error(ex.getMessage());
         }
@@ -68,7 +82,8 @@ public class CatService {
             LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
             map.add("file", fileResource);
             HttpEntity<LinkedMultiValueMap<String, Object>> entity = new HttpEntity<>(map, headers);
-            UploadResponse response = restTemplate.postForObject(BASE_URL + "/upload", entity, UploadResponse.class);
+            UploadResponse response = restTemplate.postForObject(BASE_URL + "/images/upload", entity,
+                    UploadResponse.class);
             if (response != null && response.getApproved() == 1) {
                 result = EmojiConstants.SMILEY_CAT2;
             }

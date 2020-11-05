@@ -25,6 +25,6 @@ public class VoteCallbackData implements CallbackData {
     @Override
     public String toString() {
         int value = getValue() ? 1 : 0;
-        return String.format("v_%s_%d", imageId, value);
+        return String.format("v/%s/%d", imageId, value);
     }
 }

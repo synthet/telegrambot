@@ -3,7 +3,7 @@ package ru.synthet.telegrambot.data.bot;
 class CallbackDataUtils {
 
     static CallbackData getCallbackData(String value) {
-        String[] parts = value.split("_");
+        String[] parts = value.split("/");
         if (parts.length >= 2) {
             String partType = parts[0];
             switch (partType) {

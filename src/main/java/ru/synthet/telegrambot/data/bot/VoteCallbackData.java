@@ -1,19 +1,15 @@
 package ru.synthet.telegrambot.data.bot;
 
-public class VoteCallbackData implements CallbackData {
-    public static final String TYPE = "v";
-    private static final String ACTION = "/vote";
+public abstract class VoteCallbackData implements CallbackData {
     private String imageId;
     private Boolean value;
 
-    public VoteCallbackData(String imageId, Boolean value) {
+    public void setImageId(String imageId) {
         this.imageId = imageId;
-        this.value = value;
     }
 
-    @Override
-    public String getAction() {
-        return ACTION;
+    public void setValue(Boolean value) {
+        this.value = value;
     }
 
     public String getImageId() {
@@ -24,9 +20,11 @@ public class VoteCallbackData implements CallbackData {
         return value;
     }
 
+    public abstract String getType();
+
     @Override
     public String toString() {
         int value = getValue() ? 1 : 0;
-        return String.format("%s.%s.%d", TYPE, imageId, value);
+        return String.format("%s.%s.%d", getType(), imageId, value);
     }
 }

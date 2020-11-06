@@ -2,21 +2,20 @@ package ru.synthet.telegrambot.component.action.handler;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import ru.synthet.telegrambot.data.bot.CatVoteCallbackData;
-import ru.synthet.telegrambot.integration.animal.cats.Cat;
+import ru.synthet.telegrambot.data.bot.DogVoteCallbackData;
+import ru.synthet.telegrambot.integration.animal.dogs.Dog;
 
-@Order(2)
+@Order(3)
 @Component
-public class CatActionHandler extends AnimalActionHandler<Cat, CatVoteCallbackData> {
+public class DogActionHandler extends AnimalActionHandler<Dog, DogVoteCallbackData> {
 
     @Override
     public String getCommand() {
-        return "/cat";
+        return "/dog";
     }
 
     @Override
     public String getDescription() {
-        return "Send me a cat";
+        return "Send me a dog";
     }
-
 }

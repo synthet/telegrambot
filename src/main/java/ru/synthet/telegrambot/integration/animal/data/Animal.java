@@ -1,14 +1,15 @@
-package ru.synthet.telegrambot.integration.cats.datamodel;
+package ru.synthet.telegrambot.integration.animal.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import ru.synthet.telegrambot.integration.animal.AnimalType;
 
 import java.io.Serializable;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Cat implements Serializable {
+public abstract class Animal implements Serializable {
     private List<Breed> breeds;
     private List<Category> categories;
     private String id;
@@ -63,4 +64,6 @@ public class Cat implements Serializable {
     public void setHeight(int height) {
         this.height = height;
     }
+
+    public abstract AnimalType getAnimalType();
 }

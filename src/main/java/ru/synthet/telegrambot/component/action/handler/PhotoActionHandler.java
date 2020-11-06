@@ -7,7 +7,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import ru.synthet.telegrambot.component.action.ActionContext;
-import ru.synthet.telegrambot.integration.cats.CatService;
+import ru.synthet.telegrambot.integration.animal.cats.CatService;
 
 @Order(6)
 @Component

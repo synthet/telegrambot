@@ -21,3 +21,4 @@ telegram.chat.ids=
 reddit.app.id=
 reddit.app.secret=
 cats.api.key=
+dogs.api.key=

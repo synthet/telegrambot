@@ -1,28 +1,21 @@
 package ru.synthet.telegrambot.component.action.handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 import ru.synthet.telegrambot.component.EmojiConstants;
 import ru.synthet.telegrambot.component.action.ActionContext;
+import ru.synthet.telegrambot.data.bot.CatVoteCallbackData;
 import ru.synthet.telegrambot.data.bot.VoteCallbackData;
-import ru.synthet.telegrambot.integration.cats.CatService;
-import ru.synthet.telegrambot.integration.cats.datamodel.VoteRequest;
-import ru.synthet.telegrambot.integration.cats.datamodel.VoteResponse;
+import ru.synthet.telegrambot.integration.animal.AnimalService;
+import ru.synthet.telegrambot.integration.animal.data.Animal;
+import ru.synthet.telegrambot.integration.animal.data.VoteRequest;
+import ru.synthet.telegrambot.integration.animal.data.VoteResponse;
 
 import java.util.Optional;
 
-@Order(7)
-@Component
-public class VoteActionHandler extends SendMessageActionHandler {
+public abstract class VoteActionHandler<T extends Animal, E extends VoteCallbackData> extends SendMessageActionHandler {
 
     @Autowired
-    private CatService catService;
-
-    @Override
-    public String getCommand() {
-        return "";
-    }
+    private AnimalService<T> animalService;
 
     @Override
     public String getDescription() {
@@ -31,7 +24,7 @@ public class VoteActionHandler extends SendMessageActionHandler {
 
     @Override
     public boolean accept(ActionContext actionContext) {
-        return actionContext.getHasCallbackData() && actionContext.getCallbackData() instanceof VoteCallbackData;
+        return actionContext.getHasCallbackData() && actionContext.getCallbackData().getAction().equals(getCommand());
     }
 
     @Override
@@ -41,7 +34,7 @@ public class VoteActionHandler extends SendMessageActionHandler {
         String imageId = callbackData.getImageId();
         Boolean value = callbackData.getValue();
         VoteRequest request = new VoteRequest(imageId, subId, value);
-        Optional<VoteResponse> vote = catService.createVote(request);
+        Optional<VoteResponse> vote = animalService.createVote(request);
         vote.ifPresent(voteResponse -> {
             boolean isSuccess = voteResponse.getMessage().equals("SUCCESS");
             if (isSuccess) {
@@ -52,7 +45,7 @@ public class VoteActionHandler extends SendMessageActionHandler {
 
     @Override
     protected String getMessage(ActionContext context) {
-        VoteCallbackData callbackData = (VoteCallbackData) context.getCallbackData();
+        CatVoteCallbackData callbackData = (CatVoteCallbackData) context.getCallbackData();
         return callbackData.getValue() ? EmojiConstants.SMILEY_CAT : EmojiConstants.CRYING_CAT;
     }
 }

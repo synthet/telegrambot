@@ -1,4 +1,4 @@
-package ru.synthet.telegrambot.integration.cats.datamodel;
+package ru.synthet.telegrambot.integration.animal.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

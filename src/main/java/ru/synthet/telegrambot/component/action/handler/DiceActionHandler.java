@@ -8,7 +8,7 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Order(2)
+@Order(7)
 @Component
 public class DiceActionHandler extends SendMessageActionHandler {
 

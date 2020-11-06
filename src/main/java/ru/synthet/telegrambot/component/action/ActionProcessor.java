@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.telegram.telegrambots.api.objects.*;
+import ru.synthet.telegrambot.component.data.CallbackDataProvider;
 import ru.synthet.telegrambot.data.bot.CallbackData;
 
 import java.util.Comparator;
@@ -20,6 +21,8 @@ public class ActionProcessor {
 
     @Autowired
     private List<ActionHandler> handlers;
+    @Autowired
+    private CallbackDataProvider callbackDataProvider;
 
     public void processUpdate(Update update) {
 
@@ -66,7 +69,7 @@ public class ActionProcessor {
         }
         if (callbackQuery != null) {
             String data = callbackQuery.getData();
-            CallbackData callbackData = CallbackData.getInstance(data);
+            CallbackData callbackData = callbackDataProvider.convert(data);
             context.setCallbackData(callbackData);
             if (callbackData != null) {
                 context.setHasCallbackData(true);

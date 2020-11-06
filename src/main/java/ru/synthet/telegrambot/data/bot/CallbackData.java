@@ -1,10 +1,8 @@
 package ru.synthet.telegrambot.data.bot;
 
-public interface CallbackData {
+import java.io.Serializable;
 
-    static CallbackData getInstance(String value) {
-        return CallbackDataUtils.getCallbackData(value);
-    }
+public interface CallbackData extends Serializable {
 
     String getAction();
 }

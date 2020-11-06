@@ -19,7 +19,7 @@ public abstract class VoteActionHandler<T extends Animal, E extends VoteCallback
 
     @Override
     public String getDescription() {
-        return "Vote";
+        return "";
     }
 
     @Override

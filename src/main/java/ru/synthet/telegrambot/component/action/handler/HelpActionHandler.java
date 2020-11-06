@@ -41,6 +41,7 @@ public class HelpActionHandler extends SendMessageActionHandler {
     protected String getMessage(ActionContext context) {
         return handlers.stream()
                 .filter(h -> !StringUtils.isEmpty(h.getCommand()))
+                .filter(h -> !StringUtils.isEmpty(h.getDescription()))
                 .map(h -> String.format("%s - %s", h.getCommand(), h.getDescription()))
                 .collect(Collectors.joining("\n"));
     }

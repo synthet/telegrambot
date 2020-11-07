@@ -9,7 +9,7 @@ import ru.synthet.telegrambot.integration.animal.cats.Cat;
 
 @Order(8)
 @Component
-public class CatVoteActionHandler extends VoteActionHandler<Cat, CatVoteCallbackData> {
+public class CatVoteActionHandler extends VoteActionHandler<Cat> {
 
     @Override
     public String getCommand() {

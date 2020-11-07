@@ -12,7 +12,7 @@ import ru.synthet.telegrambot.integration.animal.data.VoteResponse;
 
 import java.util.Optional;
 
-public abstract class VoteActionHandler<T extends Animal, E extends VoteCallbackData> extends SendMessageActionHandler {
+public abstract class VoteActionHandler<T extends Animal> extends SendMessageActionHandler {
 
     @Autowired
     private AnimalService<T> animalService;
@@ -28,8 +28,9 @@ public abstract class VoteActionHandler<T extends Animal, E extends VoteCallback
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void process(final ActionContext context) {
-        VoteCallbackData callbackData = (VoteCallbackData) context.getCallbackData();
+        VoteCallbackData<T> callbackData = (VoteCallbackData<T>) context.getCallbackData();
         String subId = String.valueOf(context.getChatId());
         String imageId = callbackData.getImageId();
         Boolean value = callbackData.getValue();

@@ -1,7 +1,5 @@
 package ru.synthet.telegrambot.component.action.handler;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -17,14 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class AnimalActionHandler<T extends Animal, E extends VoteCallbackData> extends SendImageActionHandler {
-
-    private final Logger LOG = LogManager.getLogger(AnimalActionHandler.class);
+public abstract class AnimalActionHandler<T extends Animal> extends SendImageActionHandler {
 
     @Autowired
     private AnimalService<T> animalService;
     @Autowired
-    private VoteCallbackDataFabric<E> voteCallbackDataFabric;
+    private VoteCallbackDataFabric<VoteCallbackData<T>> voteCallbackDataFabric;
 
     @Override
     public boolean accept(ActionContext context) {
@@ -59,11 +55,11 @@ public abstract class AnimalActionHandler<T extends Animal, E extends VoteCallba
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         InlineKeyboardButton buttonThumbsUp = new InlineKeyboardButton();
         buttonThumbsUp.setText(EmojiConstants.THUMBS_UP);
-        E voteCallbackDataUp = getCallbackData(imageId, true);
+        VoteCallbackData<T> voteCallbackDataUp = getCallbackData(imageId, true);
         buttonThumbsUp.setCallbackData(voteCallbackDataUp.toString());
         InlineKeyboardButton buttonThumbsDown = new InlineKeyboardButton();
         buttonThumbsDown.setText(EmojiConstants.THUMBS_DOWN);
-        E voteCallbackDataDown = getCallbackData(imageId, false);
+        VoteCallbackData<T> voteCallbackDataDown = getCallbackData(imageId, false);
         buttonThumbsDown.setCallbackData(voteCallbackDataDown.toString());
         List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
         keyboardButtonsRow.add(buttonThumbsUp);
@@ -74,8 +70,8 @@ public abstract class AnimalActionHandler<T extends Animal, E extends VoteCallba
         return inlineKeyboardMarkup;
     }
 
-    private E getCallbackData(String imageId, boolean value) {
-        E voteCallbackDataUp = voteCallbackDataFabric.newInstance();
+    private VoteCallbackData<T> getCallbackData(String imageId, boolean value) {
+        VoteCallbackData<T> voteCallbackDataUp = voteCallbackDataFabric.newInstance();
         voteCallbackDataUp.setImageId(imageId);
         voteCallbackDataUp.setValue(value);
         return voteCallbackDataUp;

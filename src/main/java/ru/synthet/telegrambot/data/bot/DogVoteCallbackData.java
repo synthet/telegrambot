@@ -1,6 +1,8 @@
 package ru.synthet.telegrambot.data.bot;
 
-public class DogVoteCallbackData extends VoteCallbackData {
+import ru.synthet.telegrambot.integration.animal.dogs.Dog;
+
+public class DogVoteCallbackData extends VoteCallbackData<Dog> {
     public static final String TYPE = "vd";
     public static final String ACTION = "/vote_dog";
 

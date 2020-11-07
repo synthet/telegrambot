@@ -32,7 +32,10 @@ public class ActionProcessor {
             handlers.stream()
                     .filter(handler -> handler.accept(context))
                     .findFirst()
-                    .ifPresent(handler -> handler.process(context));
+                    .ifPresent(handler -> {
+                        handler.process(context);
+                        LOG.info(String.format("Command: %s", handler.getCommand()));
+                    });
         }
     }
 
@@ -79,7 +82,6 @@ public class ActionProcessor {
             context.setMessage(command);
             processPhoto(context, message);
         }
-        LOG.info(String.format("Command: %s", context.getMessage()));
         return context;
     }
 

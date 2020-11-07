@@ -1,6 +1,8 @@
 package ru.synthet.telegrambot.data.bot;
 
-public abstract class VoteCallbackData implements CallbackData {
+import ru.synthet.telegrambot.integration.animal.data.Animal;
+
+public abstract class VoteCallbackData<T extends Animal> implements CallbackData {
     private String imageId;
     private Boolean value;
 

@@ -8,7 +8,7 @@ import ru.synthet.telegrambot.data.bot.VoteCallbackData;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class VoteCallbackDataProvider<T extends VoteCallbackData> implements CallbackDataConverter {
+public abstract class VoteCallbackDataProvider<T extends VoteCallbackData<?>> implements CallbackDataConverter {
 
     @Autowired
     private VoteCallbackDataFabric<T> voteCallbackDataFabric;

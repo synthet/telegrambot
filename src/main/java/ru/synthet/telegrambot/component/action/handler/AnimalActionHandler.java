@@ -2,16 +2,18 @@ package ru.synthet.telegrambot.component.action.handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.synthet.telegrambot.component.EmojiConstants;
 import ru.synthet.telegrambot.component.action.ActionContext;
 import ru.synthet.telegrambot.component.data.converter.VoteCallbackDataFabric;
 import ru.synthet.telegrambot.data.bot.VoteCallbackData;
 import ru.synthet.telegrambot.integration.animal.AnimalService;
 import ru.synthet.telegrambot.integration.animal.data.Animal;
+import ru.synthet.telegrambot.integration.animal.data.ImageType;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,12 +31,16 @@ public abstract class AnimalActionHandler<T extends Animal> extends SendImageAct
 
     @Override
     public void process(ActionContext context) {
-        Optional<T> optionalAnimal = animalService.getImage();
+        Collection<ImageType> imageTypes = getImageTypes();
+        Optional<T> optionalAnimal = animalService.getImage(imageTypes);
         if (optionalAnimal.isPresent()) {
             Animal animal = optionalAnimal.get();
-            sendImage(context, getCaption(animal), getUrl(animal), getReplyMarkup(animal));
+            boolean isAnimation = imageTypes.contains(ImageType.GIF);
+            sendImage(context, getCaption(animal), getUrl(animal), getReplyMarkup(animal), isAnimation);
         }
     }
+
+    protected abstract Collection<ImageType> getImageTypes();
 
     private String getUrl(Animal animal) {
         return animal.getUrl();

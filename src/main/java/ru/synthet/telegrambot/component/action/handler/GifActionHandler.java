@@ -5,25 +5,25 @@ import org.springframework.stereotype.Component;
 import ru.synthet.telegrambot.integration.animal.cats.Cat;
 import ru.synthet.telegrambot.integration.animal.data.ImageType;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
-@Order(2)
+@Order(10)
 @Component
-public class CatActionHandler extends AnimalActionHandler<Cat> {
+public class GifActionHandler extends AnimalActionHandler<Cat> {
 
     @Override
     public String getCommand() {
-        return "/cat";
+        return "/gif";
     }
 
     @Override
     public String getDescription() {
-        return "Send me a cat";
+        return "Send me a gif";
     }
 
     @Override
     protected Collection<ImageType> getImageTypes() {
-        return Arrays.asList(ImageType.JPG, ImageType.PNG);
+        return Collections.singletonList(ImageType.GIF);
     }
 }

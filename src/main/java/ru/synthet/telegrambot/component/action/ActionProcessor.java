@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.telegram.telegrambots.api.objects.*;
+import org.telegram.telegrambots.meta.api.objects.*;
 import ru.synthet.telegrambot.component.data.CallbackDataProvider;
 import ru.synthet.telegrambot.data.bot.CallbackData;
 

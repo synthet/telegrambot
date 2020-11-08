@@ -12,13 +12,16 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 import ru.synthet.telegrambot.component.EmojiConstants;
 import ru.synthet.telegrambot.component.service.download.DownloadService;
 import ru.synthet.telegrambot.component.service.download.MultipartInputStreamFileResource;
 import ru.synthet.telegrambot.integration.animal.data.*;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public abstract class AnimalService<T extends Animal> {
@@ -38,12 +41,17 @@ public abstract class AnimalService<T extends Animal> {
 
     protected abstract ParameterizedTypeReference<List<T>> getListTypeReference();
 
-    public Optional<T> getImage() {
+    public Optional<T> getImage(Collection<ImageType> types) {
         HttpHeaders headers = getHttpHeaders();
         HttpEntity entity = new HttpEntity<>(headers);
         try {
             ParameterizedTypeReference<List<T>> responseType = getListTypeReference();
-            ResponseEntity<List<T>> response = restTemplate.exchange(getBaseURL() + "/images/search",
+            String url = getBaseURL() + "/images/search";
+            UriComponentsBuilder urlBuilder = UriComponentsBuilder.fromHttpUrl(url);
+            if (!CollectionUtils.isEmpty(types)) {
+                urlBuilder.queryParam("mime_types", getImageTypes(types));
+            }
+            ResponseEntity<List<T>> response = restTemplate.exchange(urlBuilder.toUriString(),
                     HttpMethod.GET, entity, responseType);
             List<T> images = response.getBody();
             if (!CollectionUtils.isEmpty(images)) {
@@ -53,6 +61,13 @@ public abstract class AnimalService<T extends Animal> {
             LOG.error(ex.getMessage());
         }
         return Optional.empty();
+    }
+
+    private String getImageTypes(Collection<ImageType> types) {
+        return types.stream()
+                .map(ImageType::name)
+                .map(String::toLowerCase)
+                .collect(Collectors.joining(","));
     }
 
     public Optional<VoteResponse> createVote(VoteRequest request) {

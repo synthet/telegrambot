@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.SendAnimation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.objects.File;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -76,14 +77,13 @@ public class SynthetBot extends TelegramLongPollingBot {
                           InlineKeyboardMarkup replyMarkup) {
         LOG.info(String.format("Send image: %s", fileURL));
         SendPhoto sendPhoto = new SendPhoto();
-        try (MultipartInputStreamFileResource fileResource = getFileResource(fileURL)) {
-            InputFile inputFile = getInputFile(fileResource);
-            sendPhoto.setPhoto(inputFile);
+        try {
+            sendPhoto.setPhoto(new InputFile(fileURL));
             sendPhoto.setChatId(chatId);
             sendPhoto.setCaption(caption);
             sendPhoto.setReplyMarkup(replyMarkup);
             execute(sendPhoto);
-        } catch (TelegramApiException | IOException e) {
+        } catch (TelegramApiException e) {
             LOG.error("Exception: ", e);
         }
     }
@@ -92,14 +92,28 @@ public class SynthetBot extends TelegramLongPollingBot {
                               InlineKeyboardMarkup replyMarkup) {
         LOG.info(String.format("Send animation: %s", fileURL));
         SendAnimation sendAnimation = new SendAnimation();
-        try (MultipartInputStreamFileResource fileResource = getFileResource(fileURL)) {
-            InputFile inputFile = getInputFile(fileResource);
-            sendAnimation.setAnimation(inputFile);
+        try {
+            sendAnimation.setAnimation(new InputFile(fileURL));
             sendAnimation.setChatId(chatId);
             sendAnimation.setCaption(caption);
             sendAnimation.setReplyMarkup(replyMarkup);
             execute(sendAnimation);
-        } catch (TelegramApiException | IOException e) {
+        } catch (TelegramApiException e) {
+            LOG.error("Exception: ", e);
+        }
+    }
+
+    public void updateKeyboard(String chatId, Integer messageId, String inlineMessageId,
+                               InlineKeyboardMarkup replyMarkup) {
+
+        EditMessageReplyMarkup message = new EditMessageReplyMarkup();
+        message.setChatId(chatId);
+        message.setReplyMarkup(replyMarkup);
+        message.setMessageId(messageId);
+        message.setInlineMessageId(inlineMessageId);
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
             LOG.error("Exception: ", e);
         }
     }

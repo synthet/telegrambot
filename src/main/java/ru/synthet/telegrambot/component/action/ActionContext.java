@@ -1,14 +1,25 @@
 package ru.synthet.telegrambot.component.action;
 
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import ru.synthet.telegrambot.data.bot.CallbackData;
 
 public class ActionContext {
+    private Integer messageId;
     private String message;
     private Long chatId;
     private Boolean hasPhoto;
     private Boolean hasCallbackData;
     private String fileId;
     private CallbackData callbackData;
+    private InlineKeyboardMarkup replyMarkup;
+
+    public Integer getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(Integer messageId) {
+        this.messageId = messageId;
+    }
 
     public String getMessage() {
         return (message != null) ? message.trim() : "";
@@ -56,5 +67,13 @@ public class ActionContext {
 
     public void setCallbackData(CallbackData callbackData) {
         this.callbackData = callbackData;
+    }
+
+    public InlineKeyboardMarkup getReplyMarkup() {
+        return replyMarkup;
+    }
+
+    public void setReplyMarkup(InlineKeyboardMarkup replyMarkup) {
+        this.replyMarkup = replyMarkup;
     }
 }

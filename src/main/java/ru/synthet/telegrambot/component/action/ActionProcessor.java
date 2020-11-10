@@ -69,6 +69,8 @@ public class ActionProcessor {
         }
         if (message != null) {
             context.setChatId(getChatId(message));
+            context.setMessageId(message.getMessageId());
+            context.setReplyMarkup(message.getReplyMarkup());
         }
         if (callbackQuery != null) {
             String data = callbackQuery.getData();

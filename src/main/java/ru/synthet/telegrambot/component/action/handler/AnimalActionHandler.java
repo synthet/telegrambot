@@ -12,9 +12,7 @@ import ru.synthet.telegrambot.integration.animal.AnimalService;
 import ru.synthet.telegrambot.integration.animal.data.Animal;
 import ru.synthet.telegrambot.integration.animal.data.ImageType;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 public abstract class AnimalActionHandler<T extends Animal> extends SendImageActionHandler {
@@ -58,28 +56,22 @@ public abstract class AnimalActionHandler<T extends Animal> extends SendImageAct
 
     private InlineKeyboardMarkup getReplyMarkup(Animal animal) {
         String imageId = animal.getId();
-        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-        InlineKeyboardButton buttonThumbsUp = new InlineKeyboardButton();
-        buttonThumbsUp.setText(EmojiConstants.THUMBS_UP);
-        VoteCallbackData<T> voteCallbackDataUp = getCallbackData(imageId, true);
-        buttonThumbsUp.setCallbackData(voteCallbackDataUp.toString());
-        InlineKeyboardButton buttonThumbsDown = new InlineKeyboardButton();
-        buttonThumbsDown.setText(EmojiConstants.THUMBS_DOWN);
-        VoteCallbackData<T> voteCallbackDataDown = getCallbackData(imageId, false);
-        buttonThumbsDown.setCallbackData(voteCallbackDataDown.toString());
-        List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
-        keyboardButtonsRow.add(buttonThumbsUp);
-        keyboardButtonsRow.add(buttonThumbsDown);
-        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-        rowList.add(keyboardButtonsRow);
-        inlineKeyboardMarkup.setKeyboard(rowList);
-        return inlineKeyboardMarkup;
+        InlineKeyboardButton buttonThumbsUp = getButton(true, imageId, EmojiConstants.THUMBS_UP);
+        InlineKeyboardButton buttonThumbsDown = getButton(false, imageId, EmojiConstants.THUMBS_DOWN);
+        return VoteButtonsUtil.getInlineKeyboardMarkup(buttonThumbsUp, buttonThumbsDown);
+    }
+
+    private InlineKeyboardButton getButton(Boolean value, String imageId, String text) {
+        InlineKeyboardButton button = new InlineKeyboardButton();
+        button.setText(text);
+        button.setCallbackData(getCallbackData(imageId, value).toString());
+        return button;
     }
 
     private VoteCallbackData<T> getCallbackData(String imageId, boolean value) {
-        VoteCallbackData<T> voteCallbackDataUp = voteCallbackDataFabric.newInstance();
-        voteCallbackDataUp.setImageId(imageId);
-        voteCallbackDataUp.setValue(value);
-        return voteCallbackDataUp;
+        VoteCallbackData<T> voteCallbackData = voteCallbackDataFabric.newInstance();
+        voteCallbackData.setImageId(imageId);
+        voteCallbackData.setValue(value);
+        return voteCallbackData;
     }
 }
